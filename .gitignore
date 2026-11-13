@@ -169,3 +169,10 @@ poetry.toml
 
 # LSP config files
 pyrightconfig.json
+
+# Postman
+.postman/
+postman/
+*.postman_collection.json
+*.postman_environment.json
+*.postman_globals.json
