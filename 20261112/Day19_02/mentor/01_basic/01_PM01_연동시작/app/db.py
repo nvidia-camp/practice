@@ -12,7 +12,8 @@ def get_engine() -> Engine:
     settings = get_settings()
     if settings.db_password == "CHANGE_ME":
         raise RuntimeError(".env의 DB_PASSWORD를 실제 학습용 비밀번호로 바꾸세요.")
-    return create_engine(settings.database_url, pool_pre_ping=True)
+    # return create_engine(settings.database_url, pool_pre_ping=True)
+    return create_engine(settings.database_url, pool_pre_ping=True, echo=True)
 
 @lru_cache
 def get_session_factory():

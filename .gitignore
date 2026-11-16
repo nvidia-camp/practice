@@ -122,8 +122,13 @@ celerybeat.pid
 
 # Environments
 .env
+.env.*
+!.env.example
+!.env.*.example
+!.env.template
+!.env.*.template
 .venv
-env/
+envs/
 venv/
 ENV/
 env.bak/
@@ -170,9 +175,24 @@ poetry.toml
 # LSP config files
 pyrightconfig.json
 
+# Local editor settings
+.vscode/
+*.code-workspace
+.idea/
+*.swp
+*.swo
+*~
+
 # Postman
 .postman/
 postman/
 *.postman_collection.json
 *.postman_environment.json
 *.postman_globals.json
+
+# Operating system metadata
+.DS_Store
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
