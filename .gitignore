@@ -196,3 +196,6 @@ postman/
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+
+# Separate git repository
+20261120/report-agent/
