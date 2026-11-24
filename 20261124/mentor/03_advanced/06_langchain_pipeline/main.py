@@ -1,35 +1,43 @@
-"""Day27 강의 실습. 실행은 역할 폴더에서 Python으로 실행합니다."""
-from pathlib import Path
-import sys
-HERE=Path(__file__).resolve().parent
-ROLE_ROOT=next(p for p in HERE.parents if (p/'coursekit').is_dir())
-sys.path.insert(0,str(ROLE_ROOT))
+"""Day27 실습 06 · LangChain Pipeline 통합 (심화 — main.py 진입점)"""
+from pathlib import Path  # 파일/폴더 경로를 OS에 상관없이 다루기 위한 모듈
+import sys                # 파이썬 모듈 검색 경로(sys.path)를 수정하기 위한 모듈
 
+HERE = Path(__file__).resolve().parent                                 # 현재 main.py가 있는 폴더 경로
+ROLE_ROOT = next(p for p in HERE.parents if (p / 'coursekit').is_dir())  # 상위 폴더 중 coursekit/이 있는 역할 루트(mentor/) 탐색
+sys.path.insert(0, str(ROLE_ROOT))                                     # coursekit 모듈을 import할 수 있도록 검색 경로 맨 앞에 추가
 
-import argparse
+import argparse                             # 터미널 실행 옵션(--offline 등)을 파싱하는 모듈
+from coursekit.workshops import STAGE_RUNNERS  # 각 실습 번호별 실행기(6번은 LangChain 파이프라인 실행)
+from coursekit.io import save_report           # 실행 결과를 outputs/*.json 파일로 저장하는 함수
 
-from coursekit.workshops import STAGE_RUNNERS
+from schemas.request import prepare_pipeline_request  # 입력 스키마 구성 (schemas/request.py)
+from chains.graph import wire_langchain_pipeline      # LCEL 체인 조립 (chains/graph.py)
+from services.trace import validate_trace             # 중간 추적 검증 (services/trace.py)
+from services.audit import audit_pipeline             # Stage 시간·출처 감사 (services/audit.py)
 
-from coursekit.io import save_report
-
-
-
-from schemas.request import prepare_pipeline_request
-
-from chains.graph import wire_langchain_pipeline
-
-from services.trace import validate_trace
-
-from services.audit import audit_pipeline
 
 def main():
-    parser=argparse.ArgumentParser(description='Day27 실습 06 · 06_langchain_pipeline')
-    parser.add_argument('--offline',action='store_true',help='교육용 고정 데이터·점수. 모델 품질 실측이 아닙니다.')
-    args=parser.parse_args()
-    # Day27: 일부 진단 실습 외에는 기본 실행이 실제 모델·DB·LLM 경로입니다.
-    report=STAGE_RUNNERS[6](args.offline,[prepare_pipeline_request,wire_langchain_pipeline,validate_trace,audit_pipeline])
-    path=save_report(HERE,'day27_06_'+('fixture' if args.offline else 'live')+'.json',report)
-    print('실습 06 결과:', path)
+    parser = argparse.ArgumentParser(description='Day27 실습 06 · 06_langchain_pipeline')  # CLI 인자 파서 생성
+    parser.add_argument(
+        '--offline',
+        action='store_true',  # --offline 플래그를 주면 True, 안 주면 False
+        help='교육용 고정 데이터·점수. 모델 품질 실측이 아닙니다.',
+    )
+    args = parser.parse_args()  # 터미널에서 전달된 인자 파싱
+
+    # 6번 실습 러너에 [요청 준비, 파이프라인 조립, Trace 검증, Audit 감사] 4개 함수를 넘겨 실행
+    report = STAGE_RUNNERS[6](
+        args.offline,
+        [prepare_pipeline_request, wire_langchain_pipeline, validate_trace, audit_pipeline],
+    )
+
+    # --offline이면 fixture.json, 기본 실행이면 live.json으로 결과 저장
+    filename = 'day27_06_' + ('fixture' if args.offline else 'live') + '.json'
+    path = save_report(HERE, filename, report)
+
+    print('실습 06 결과:', path)  # 저장된 JSON 파일 경로 출력
     print('보고서를 확인하고 reports/review.md에 원문 대조·실행 모드를 기록하세요.')
 
-if __name__=='__main__':main()
+
+if __name__ == '__main__':  # 이 파일을 직접 실행했을 때만 main() 호출 (import 시 자동 실행 방지)
+    main()

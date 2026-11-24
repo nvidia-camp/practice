@@ -2,6 +2,27 @@
 
 **강의 HTML 64페이지**에 대응합니다. 핵심 학습 목표는 **Runnable로 Rewrite·Retriever·Rerank·Context를 순서대로 연결합니다.**입니다.
 
+## 파이프라인 전체 흐름
+
+```mermaid
+flowchart TD
+    A["main.py 실행 (--offline 또는 live)"] --> B["STAGE_RUNNERS[6] 호출"]
+    B --> C["prepare_pipeline_request(case)<br/>원 질문·History·candidate_k=5·context_k=2 구성"]
+    B --> D["wire_langchain_pipeline(dependencies, offline)<br/>create_rag_pipeline()로 LCEL Runnable 조립"]
+    C --> E["chain.invoke(req) 실행 시작"]
+    D --> E
+
+    subgraph LCEL["LangChain Runnable Pipeline"]
+        direction LR
+        S1["1. Rewrite<br/>History 참고해 검색 질문 생성"] --> S2["2. Retriever<br/>카테고리 필터 + 후보 5개 검색"]
+        S2 --> S3["3. Rerank<br/>관련성 순위 재평가"]
+        S3 --> S4["4. Context<br/>상위 2개 선택·출처 ID 확정"]
+    end
+
+    E --> S1
+    S4 --> F["save_report()<br/>outputs/day27_06_fixture.json 또는 live.json 저장"]
+```
+
 ## 1. 학습 전 확인
 
 - 11월 23일에 학습한 LangChain `Document`·`Runnable`·`invoke()`와 출처 Metadata를 복습합니다.

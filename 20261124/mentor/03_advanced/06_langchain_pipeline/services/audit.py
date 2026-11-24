@@ -1,14 +1,12 @@
-"""단계별 역할 분리: services/audit.py / 독립 실행은 main.py. """
+"""파이프라인 실행 시간 및 출처 연결 감사 (services/audit.py)"""
+
 
 def audit_pipeline(result):
-    """Stage 시간과 출처 연결을 기록하되 진위 판단은 별도로 수행합니다."""
-    # BEGIN D27-06-A04
-    # ANSWER D27-06-A04: Stage 시간과 출처 연결을 기록하되 진위 판단은 별도로 수행합니다.
-    # 1. 입력: result (필요한 값만 받습니다.)
-    # 2. 절차: Stage 시간과 출처 연결을 기록하되 진위 판단은 별도로 수행합니다.
-    # 3. 반환: 호출한 Stage가 사용할 값/상태를 반환합니다.
-    # 4. 주의: 오류를 빈 결과로 숨기지 않고 출처·필터 계약을 유지합니다.
-    t=result['trace'];return {'mode':t['source_mode'],'stage_times':sorted(t['timing_ms']),
-            'output_source_ids':[r['citation_id'] for r in result['sources']],
-            'manual_grounding_review':True}
-    # END D27-06-A04
+    """Stage별 실행 시간과 출처 연결을 기록합니다. (답변의 사실 여부 판단은 별도 검토)"""
+    t = result['trace']  # 파이프라인 실행 중 기록된 단계별 추적 정보(trace) 추출
+    return {
+        'mode': t['source_mode'],                                  # 실행 모드 기록 (offline_fixture / live 등)
+        'stage_times': sorted(t['timing_ms']),                     # 각 Stage의 소요 시간 키 목록을 정렬해 기록
+        'output_source_ids': [r['citation_id'] for r in result['sources']],  # 최종 응답에 포함된 출처(citation_id) 목록 추출
+        'manual_grounding_review': True,                           # 출처 ID 구조 검증과 답변 내용의 사실 확인(Grounding)은 별도 수동 검토 필요
+    }

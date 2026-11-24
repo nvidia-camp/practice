@@ -1,14 +1,14 @@
-"""단계별 역할 분리: checks.py / 독립 실행은 main.py. """
+"""파이프라인 실행 결과의 중간 추적(Trace) 검증 (checks.py)"""
+
 
 def validate_trace(result):
-    """원 질문·검색용 질문·후보·Context ID를 각각 확인합니다."""
-    # BEGIN D27-06-I03
-    # ANSWER D27-06-I03: 원 질문·검색용 질문·후보·Context ID를 각각 확인합니다.
-    # 1. 입력: result (필요한 값만 받습니다.)
-    # 2. 절차: 원 질문·검색용 질문·후보·Context ID를 각각 확인합니다.
-    # 3. 반환: 호출한 Stage가 사용할 값/상태를 반환합니다.
-    # 4. 주의: 오류를 빈 결과로 숨기지 않고 출처·필터 계약을 유지합니다.
-    t=result['trace'];return {'questions_separate':bool(t['original_question'] and t['search_query']),
-            'ids_recorded':isinstance(t['candidate_ids'],list) and isinstance(t['included_ids'],list),
-            'included_from_candidates':set(t['included_ids']).issubset(t['candidate_ids'])}
-    # END D27-06-I03
+    """원 질문·검색용 질문·후보 ID·최종 Context ID가 올바르게 기록되었는지 검증합니다."""
+    t = result['trace']  # 파이프라인 실행 중 기록된 단계별 추적 정보(trace) 추출
+    return {
+        # 원 질문(original_question)과 재작성된 검색 질문(search_query)이 둘 다 비어 있지 않고 따로 보관됐는지 확인
+        'questions_separate': bool(t['original_question'] and t['search_query']),
+        # 1차 후보 ID 목록(candidate_ids)과 최종 Context ID 목록(included_ids)이 리스트 형태로 기록됐는지 확인
+        'ids_recorded': isinstance(t['candidate_ids'], list) and isinstance(t['included_ids'], list),
+        # 최종 Context에 들어간 ID가 반드시 1차 검색 후보 ID의 부분집합인지 확인 (없는 문서가 끼어들지 않았는지 검사)
+        'included_from_candidates': set(t['included_ids']).issubset(t['candidate_ids']),
+    }
