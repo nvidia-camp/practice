@@ -34,10 +34,10 @@ python 03_advanced/07_debug_comparison/main.py --offline
 python -m pytest -q 03_advanced/07_debug_comparison/tests
 ```
 
-실습 06~08은 **TODO 완성 후**, CUDA·PostgreSQL·LLM API 환경 준비 시 아래 실제 경로도 실행할 수 있습니다.
+CUDA·PostgreSQL·LLM API 환경을 준비한 뒤, 아래 명령으로 실제 평가를 실행하고 보고서까지 만들 수 있습니다.
 
 ```bash
-python 03_advanced/07_debug_comparison/main.py --live
+python 03_advanced/07_debug_comparison/scripts/report.py --live
 ```
 
 - **`--offline`(기본):** 실제 모델/DB를 호출하지 않는 고정 교육용 사례입니다. 결과가 좋아도 모델 성능이라 주장하지 마세요.
@@ -47,6 +47,7 @@ python 03_advanced/07_debug_comparison/main.py --live
 ## 결과물과 완료기준
 
 - `outputs/result.json` : 수행 결과. `mode`, `question_id`, 평가값과 No-answer 처리 여부 확인
+- `outputs/report.md` : 질문별 점수와 진단을 정리한 보고서. `--live` 실행 시 Baseline·Rerank의 LLM 답변과 출처 위치 포함
 - `expected/EXPECTED.md` : 결과 필드와 해석 방법 확인
 - `reports/review.md` : 본인 출력·오류·해석·다음 날 Agent와의 연결 기록
 - **완료 기준:** 한 번에 하나의 기능을 변경하여 성능 차이와 실패 원인을 진단합니다. Gold/정답 레이블이 실행 대상 Target으로 누출되지 않고, 평가 결과를 구체적인 질문·문서 ID로 설명할 수 있어야 합니다.

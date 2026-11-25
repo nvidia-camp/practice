@@ -18,12 +18,8 @@ from app.diagnostics.stages import compare_four_variants
 from app.policies.regression import regression_decision
 
 
-def main():
-    parser=argparse.ArgumentParser(description="Day28 RAG Evaluation 실습")
-    mode=parser.add_mutually_exclusive_group()
-    mode.add_argument('--offline',action='store_true',help='고정 학습 데이터만 실행(기본값)')
-    mode.add_argument('--live',action='store_true',help='실제 CUDA GPU/DB/LLM 연결. 06~08만 지원하며 API 비용 발생 가능')
-    args=parser.parse_args()
+def run_evaluation(live: bool) -> dict:
+    """실습 07을 실행하고 평가 결과를 저장합니다."""
     hooks={
         "score_delta":score_delta,
         "find_problem_stage":find_problem_stage,
@@ -32,12 +28,12 @@ def main():
     }
     # 학생 과제 함수가 실제 서비스가 아니라 이 지도에 정의된 실습 단계에서 호출됩니다.
     try:
-        result=execute(7,hooks,live=args.live,level='03_advanced')
+        result=execute(7,hooks,live=live,level='03_advanced')
     except Exception as exc:
         # 실패 기록에는 Key·Password·원본 Prompt를 포함하지 않습니다.
         failure={'status':'execution_failed','exercise':7,
                  'stage':getattr(exc,'stage','evaluation'),
-                 'error_type':type(exc).__name__, 'mode':'live' if args.live else 'offline_fixture'}
+                 'error_type':type(exc).__name__, 'mode':'live' if live else 'offline_fixture'}
         write_json(Path(__file__).resolve().parent/'outputs'/'failure.json',failure)
         raise
     output=Path(__file__).resolve().parent/'outputs'/'result.json'
@@ -45,6 +41,17 @@ def main():
     # 학생이 코드로 만든 설명 보고서는 별도 Markdown 파일로 저장합니다.
     if isinstance(result.get('markdown_report'),str):
         (output.parent/'report.md').write_text(result['markdown_report'],encoding='utf-8')
+    return result
+
+
+def main():
+    parser=argparse.ArgumentParser(description="Day28 RAG Evaluation 실습")
+    mode=parser.add_mutually_exclusive_group()
+    mode.add_argument('--offline',action='store_true',help='고정 학습 데이터만 실행(기본값)')
+    mode.add_argument('--live',action='store_true',help='실제 CUDA GPU/DB/LLM 연결. 06~08만 지원하며 API 비용 발생 가능')
+    args=parser.parse_args()
+    result=run_evaluation(live=args.live)
+    output=Path(__file__).resolve().parent/'outputs'/'result.json'
     print('Day28 실습 7 · 03_advanced ·',result['mode'])
     print('출력:',output)
     return result

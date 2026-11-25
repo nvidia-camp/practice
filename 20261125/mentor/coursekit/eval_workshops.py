@@ -119,6 +119,14 @@ def execute(number, hooks, *, live=False, level='01_basic'):
                  'rerank_recall':m2['recall_at_k'],
                  'delta_recall':hooks['score_delta'](m1['recall_at_k'],m2['recall_at_k']),
                  'diagnosis':hooks['find_problem_stage'](a,g)}
+            if live:
+                row['generations'] = {}
+                for variant, run in (('baseline', a), ('rerank_only', b)):
+                    row['generations'][variant] = {
+                        'status': run['status'],
+                        'answer': run['answer'],
+                        'sources': run['sources'],
+                    }
             if 'compare_four_variants' in hooks:
                 variants=['baseline','rerank_only'] if live else ['baseline','rewrite_only','rerank_only','both']
                 runs={v:(a if v=='baseline' else b if v=='rerank_only' else load(v)) for v in variants}
