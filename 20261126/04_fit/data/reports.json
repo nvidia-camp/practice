@@ -1,0 +1,14 @@
+[
+  {"report_id": 12, "category": "EXPERIMENT", "title": "RAG 근거 인용 정확도 향상 실험", "content": "검색된 문서 조각에 출처 ID를 붙이고 답변에서 그 ID만 인용하도록 프롬프트를 바꾸자 인용 정확도가 72%에서 91%로 올랐다.", "index_status": "ready", "revision": 1, "indexed_revision": 1},
+  {"report_id": 18, "category": "DAILY_WORK", "title": "11월 셋째 주 업무 일지", "content": "FastAPI 엔드포인트 정리와 PostgreSQL 백업 스크립트 점검을 진행했다.", "index_status": "ready", "revision": 1, "indexed_revision": 1},
+  {"report_id": 24, "category": "DATA_PROCESSING", "title": "보고서 개요 중복 제거", "content": "개요 텍스트의 해시를 비교해 중복 보고서 14건을 찾아 정리했다.", "index_status": "ready", "revision": 1, "indexed_revision": 1},
+  {"report_id": 31, "category": "PROMPT", "title": "인용 형식 강제 프롬프트 비교", "content": "답변 끝에 [RPT-번호] 형식으로 근거를 달게 하는 프롬프트 세 가지를 비교했다. 형식을 예시로 보여 준 버전의 인용 누락이 가장 적었다.", "index_status": "ready", "revision": 1, "indexed_revision": 1},
+  {"report_id": 37, "category": "MEETING", "title": "검색 품질 회의록", "content": "Reranker 도입 여부를 논의했다. 상위 20건을 다시 정렬하면 RAG 근거 품질이 좋아질 것으로 기대했다.", "index_status": "ready", "revision": 1, "indexed_revision": 1},
+  {"report_id": 42, "category": "EXPERIMENT", "title": "임베딩 모델 비교", "content": "multilingual-e5-small과 bge-m3의 한국어 검색 정확도를 비교했다.", "index_status": "pending", "revision": 1, "indexed_revision": null},
+  {"report_id": 50, "category": "DATA_PROCESSING", "title": "PDF 표 추출 파이프라인", "content": "PDF에서 표를 추출해 CSV로 저장하는 파이프라인을 만들었다. 2차 수정에서 병합 셀 처리를 추가했다.", "index_status": "ready", "revision": 2, "indexed_revision": 1},
+  {"report_id": 57, "category": "DAILY_WORK", "title": "GPU 서버 점검", "content": "CUDA 드라이버를 업데이트하고 메모리 사용량을 확인했다.", "index_status": "failed", "revision": 1, "indexed_revision": null},
+  {"report_id": 63, "category": "RESEARCH_PLAN", "title": "근거 인용 자동 검증 연구 계획", "content": "답변이 인용한 출처 ID가 실제 검색 결과에 있는지 자동으로 검사하는 방법을 연구할 계획이다.", "index_status": "pending", "revision": 1, "indexed_revision": null},
+  {"report_id": 71, "category": "PROMPT", "title": "요약 길이 제어 프롬프트", "content": "요약문 길이를 세 문장으로 제한하는 지시문을 실험했다.", "index_status": "ready", "revision": 1, "indexed_revision": 1},
+  {"report_id": 78, "category": "HR", "title": "인사 평가 일정", "content": "하반기 인사 평가 일정과 면담 순서를 정리했다.", "index_status": "ready", "revision": 1, "indexed_revision": 1},
+  {"report_id": 85, "category": "RESEARCH_PLAN", "title": "Tool Calling 오류 처리 연구 계획", "content": "Agent가 잘못된 인자로 Tool을 호출했을 때 다시 시도하게 하는 방법을 정리할 계획이다.", "index_status": "pending", "revision": 1, "indexed_revision": null}
+]
