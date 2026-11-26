@@ -1,6 +1,6 @@
 """용도별 추가 검증: Intermediate · Day29."""
 
-def make_api():
+def make_api(api_response):
     """FastAPI에 POST /api/agent/ask 를 등록합니다. 로컬 교육용·인증 미구현."""
     # 해설 D29-08-I-03: FastAPI는 사용자의 입력을 검증해 Agent에 전달하고 최종 결과를 반환합니다.
     # 검수 기준: 인용 ID가 실제 Tool 근거 집합 밖이면 성공 응답으로 위장하지 않습니다.

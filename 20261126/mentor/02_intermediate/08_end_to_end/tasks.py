@@ -24,4 +24,8 @@ def api_response(run: dict) -> dict:
 
 
 # 추가 구현: 같은 프로젝트의 별도 책임 모듈
-from validation_08 import make_api
+from validation_08 import make_api as build_api
+
+
+def make_api():
+    return build_api(api_response)
